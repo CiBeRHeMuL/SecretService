@@ -22,8 +22,19 @@ paths:
             type: string
             pattern: '.*'
       responses:
-        default:
-          description: ''
+        '200':
+          description: Ok
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/health:
     get:
       tags:
@@ -100,6 +111,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      type: object
     Meta:
       required:
         - mode
@@ -134,13 +152,6 @@ components:
           type:
             - string
             - 'null'
-      type: object
-    ErrorResponse:
-      required:
-        - error
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
       type: object
     Error:
       required:

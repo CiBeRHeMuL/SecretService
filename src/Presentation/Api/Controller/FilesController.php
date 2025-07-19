@@ -8,10 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Presentation\Api\OpenApi\Attribute as LOA;
 
 class FilesController extends AbstractController
 {
     #[Route('/files/{hash}', 'download_files', requirements: ['hash' => '.*'], methods: ['GET'])]
+    #[LOA\FileResponse(['zip'])]
+    #[LOA\ErrorResponse(404)]
     public function download(
         string $hash,
         DownloadFilesUseCase $useCase,
