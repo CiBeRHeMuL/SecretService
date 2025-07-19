@@ -41,11 +41,16 @@ when@prod:
   monolog:
     handlers:
       app:
+        type: fingers_crossed
+        action_level: error
+        handler: app_nested
+        excluded_http_codes: [404, 405]
+        channels: ["!event"]
+      app_nested:
         type: rotating_file
         path: '%kernel.logs_dir%/error.log'
-        level: error
+        level: debug
         max_files: 10
-        channels: ["!event"]
       console:
         type: console
         process_psr_3_messages: false
