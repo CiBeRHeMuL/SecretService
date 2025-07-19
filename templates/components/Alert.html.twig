@@ -1,0 +1,10 @@
+<div
+    role="alert"
+    {{ attributes.defaults({class: 'alert alert-dismissible icon-link alert-' ~ this.type}) }}
+>
+    <twig:ux:icon
+        name="{{ this.icon }}"
+        height="1rem"
+    />
+    {{ this.message }}
+</div>

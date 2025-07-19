@@ -1,0 +1,159 @@
+openapi: 3.1.0
+info:
+  title: 'Secret Service'
+  description: 'Service to send secret messages'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://secret.loc'
+  -
+    url: 'http://secret.loc'
+    description: 'Local development server'
+paths:
+  '/api/files/{hash}':
+    get:
+      operationId: get_api_download_files
+      parameters:
+        -
+          name: hash
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '.*'
+      responses:
+        default:
+          description: ''
+  /api/health:
+    get:
+      tags:
+        - health
+      operationId: get_api_health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { type: boolean }
+                  meta: { $ref: '#/components/schemas/Meta' }
+                type: object
+  /api/message:
+    post:
+      operationId: post_api_create_message
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                text:
+                  type: [string, 'null']
+                  default: ''
+                files:
+                  type: [array, 'null']
+                  items: { type: string, format: binary }
+                  default: null
+              type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { $ref: '#/components/schemas/CreatedMessage' }
+                  meta: { $ref: '#/components/schemas/Meta' }
+                type: object
+        '422':
+          description: 'Unprocessable Entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+  '/api/message/{hash}':
+    get:
+      operationId: get_api_get_message
+      parameters:
+        -
+          name: hash
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '.*'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { $ref: '#/components/schemas/ReadMessage' }
+                  meta: { $ref: '#/components/schemas/Meta' }
+                type: object
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Meta:
+      required:
+        - mode
+      properties:
+        mode:
+          type: string
+      type: object
+    CreatedMessage:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+      type: object
+    ValidationResponse:
+      properties:
+        errors:
+          type: object
+          default: []
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+      type: object
+    ReadMessage:
+      required:
+        - text
+      properties:
+        text:
+          type: string
+        files_download_url:
+          type:
+            - string
+            - 'null'
+      type: object
+    ErrorResponse:
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      type: object
+    Error:
+      required:
+        - slug
+        - message
+      properties:
+        slug:
+          type: string
+        message:
+          type: string
+      type: object
+tags:
+  -
+    name: health
+    description: 'Ручки для проверки работоспособности сервера'
+

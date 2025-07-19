@@ -1,0 +1,20 @@
+validation:
+  message:
+    text_and_files_empty: 'Необходимо добавить текст или прикрепить хотя бы один файл'
+    files:
+      wrong: 'Не удалось загрузить файл'
+errors:
+  message:
+    not_found: 'Сообщение не найдено'
+secret_message: 'Секретное сообщение'
+Text: 'Текст сообщения'
+Files: 'Файлы'
+Submit: 'Отправить'
+'Drag and drop or browse': Выберите файлы
+copy_new_message: 'Скопировать ссылку на сообщение'
+copied_new_message: 'Ссылка скопирована'
+files:
+  not_found: 'Файлы не найдены'
+  download: 'Скачать файлы'
+create_new_message: 'Новое сообщение'
+message_copied: 'Текст сообщения скопирован'

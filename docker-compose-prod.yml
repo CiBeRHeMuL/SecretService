@@ -1,0 +1,84 @@
+version: "3.9"
+services:
+  postgresql:
+    build:
+      dockerfile: ./docker/postgresql/Dockerfile
+      context: .
+    container_name: postgresql-container
+    hostname: postgresql
+    restart: always
+    ports:
+      - "${PG_EXTERNAL_PORT}:5432"
+    environment:
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
+      POSTGRES_DB: "${PG_DBNAME}"
+    networks:
+      - caddy
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - type: bind
+        source: .
+        target: /app
+  php:
+    build:
+      context: ./
+      dockerfile: docker/php/Dockerfile
+    container_name: php-container
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+      - type: volume
+        source: phpsocket
+        target: /var/run
+    networks:
+      - caddy
+    restart: always
+  nginx:
+    image: nginx
+    container_name: nginx-container
+    volumes:
+      - type: bind
+        source: ./docker/nginx/prod.nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: .
+        target: /app
+      - type: volume
+        source: phpsocket
+        target: /var/run
+        volume:
+          nocopy: true
+    depends_on:
+      - php
+    networks:
+      - caddy
+    ports:
+      - "${NGINX_EXTERNAL_PORT}:80"
+    restart: always
+  messenger:
+    container_name: messenger-container
+    build:
+      context: ./
+      dockerfile: docker/messenger/Dockerfile
+    environment:
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
+      POSTGRES_DB: "${PG_DBNAME}"
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    depends_on:
+      - php
+      - postgresql
+    networks:
+      - caddy
+    restart: always
+
+volumes:
+  phpsocket:
+networks:
+  caddy:
+    external: true

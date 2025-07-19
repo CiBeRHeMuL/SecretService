@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastTrigger = document.getElementById('text-block')
+            const toastLiveExample = document.getElementById('text-block-copied')
+
+            if (toastTrigger) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                toastTrigger.addEventListener('click', (evt) => {
+                    navigator.clipboard
+                        .writeText(evt.currentTarget.dataset.url)
+                        .then(function () {
+                            let button = document.querySelector('#text-block');
+                            button.classList.remove('border-primary');
+                            button.classList.add('border-success', 'disabled');
+                            toastBootstrap.show();
+
+                            setTimeout(function () {
+                                button.classList.remove('border-success', 'disabled');
+                                button.classList.add('border-primary');
+                                toastBootstrap.hide();
+                            }, 2000);
+                        });
+                });
+            }
+        });
+    </script>
+    <div class="row gy-2 w-100">
+        {% if message.text %}
+            <div
+                class="col-12 border-primary border p-2 rounded"
+                style="min-height: 10rem; cursor: pointer;"
+                id="text-block"
+            >
+                {{ message.text }}
+            </div>
+        {% endif %}
+        {% if message.filesDownloadHash %}
+            <a
+                href="{{ path('api_download_files', {hash: message.filesDownloadHash}) }}"
+                download
+                class="btn btn-outline-primary col-12"
+            >
+                {{ 'files.download'|trans }}
+            </a>
+        {% endif %}
+        <a href="{{ url('create_message') }}" class="btn btn-outline-success col-12">
+            {{ 'create_new_message'|trans }}
+        </a>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div
+            id="text-block-copied"
+            class="toast border-0"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+        >
+            <twig:Alert
+                type="success"
+                message="{{ 'message_copied'|trans }}"
+                style="margin: 0;"
+                class="w-100"
+            />
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row w-100">
+        <twig:Alert
+            type="danger"
+            message="{{ 'errors.message.not_found'|trans }}"
+        />
+        <a href="{{ url('create_message') }}" class="btn btn-outline-success col-12">
+            {{ 'create_new_message'|trans }}
+        </a>
+    </div>
+{% endblock %}

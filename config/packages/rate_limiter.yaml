@@ -1,0 +1,9 @@
+# config/packages/rate_limiter.yaml
+framework:
+  rate_limiter:
+    api:
+      policy: 'sliding_window'
+      limit: '%env(int:RATE_LIMIT)%'
+      interval: '%env(RATE_INTERVAL)%'
+      cache_pool: 'cache.rate_limiter'
+      lock_factory: 'lock.default.factory'
