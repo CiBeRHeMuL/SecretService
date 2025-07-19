@@ -18,3 +18,8 @@ files:
   download: 'Скачать файлы'
 create_new_message: 'Новое сообщение'
 message_copied: 'Текст сообщения скопирован'
+message_lifetime: 'Сообщение будет действовать {interval}'
+message_lifetime_while_without_interval: 'Сообщение будет действовать еще'
+message_lifetime_expired: 'Сообщение больше не действительно'
+files_lifetime_while_without_interval: 'Скачивание файлов будет доступно еще'
+files_lifetime_expired: 'Скачать файлы больше нельзя'

@@ -15,6 +15,7 @@
         "ext-pdo_pgsql": "*",
         "ext-sodium": "*",
         "ext-zip": "*",
+        "ext-intl": "*",
         "doctrine/doctrine-bundle": "^2.15",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.5",

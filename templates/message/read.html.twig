@@ -28,6 +28,16 @@
         });
     </script>
     <div class="row gy-2 w-100">
+        {% if message.filesDownloadHash %}
+            <twig:DecreasingTimerAlert
+                interval="{{ message.filesValidUntil.diff(date()) }}"
+                whileMessage="{{ 'files_lifetime_while_without_interval'|trans }}"
+                expiredMessage="{{ 'files_lifetime_expired'|trans }}"
+                whileType="warning"
+                expiredType="danger"
+                id="download-files-timer"
+            />
+        {% endif %}
         {% if message.text %}
             <div
                 class="col-12 border-primary border p-2 rounded"
@@ -42,6 +52,7 @@
                 href="{{ path('api_download_files', {hash: message.filesDownloadHash}) }}"
                 download
                 class="btn btn-outline-primary col-12"
+                onclick="this.remove(); document.querySelector('#download-files-timer').remove();"
             >
                 {{ 'files.download'|trans }}
             </a>

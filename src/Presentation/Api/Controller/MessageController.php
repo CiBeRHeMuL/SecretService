@@ -94,16 +94,17 @@ class MessageController extends AbstractController
             $preparedFiles,
         );
 
-        $idHash = $useCase->execute($dto);
+        $result = $useCase->execute($dto);
 
         return Response::success(
             new SuccessResponse(
                 new CreatedMessage(
                     $urlGenerator->generate(
                         'api_get_message',
-                        ['hash' => $idHash],
+                        ['hash' => $result->hash],
                         UrlGeneratorInterface::ABSOLUTE_URL,
                     ),
+                    $result->validUntil->format(DATE_RFC3339),
                 ),
             ),
         );
@@ -133,6 +134,7 @@ class MessageController extends AbstractController
                             UrlGeneratorInterface::ABSOLUTE_URL,
                         )
                         : null,
+                    $message->filesValidUntil?->format(DATE_RFC3339),
                 ),
             ),
         );

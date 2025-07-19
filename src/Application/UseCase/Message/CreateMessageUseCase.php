@@ -2,6 +2,7 @@
 
 namespace App\Application\UseCase\Message;
 
+use App\Application\Dto\Message\CreatedMessageDto;
 use App\Application\Dto\Message\CreateMessageDto;
 use App\Application\Dto\Message\CreateMessageFileDto;
 use App\Domain\Dto\File\SavingFile;
@@ -19,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 class CreateMessageUseCase
 {
@@ -35,13 +37,13 @@ class CreateMessageUseCase
     }
 
     /**
-     * Создает сообщение и возвращает хеш идентификатора, с помощью которого можно получить доступ к сообщению
+     * Создает сообщение и возвращает информацию о сообщении
      *
      * @param CreateMessageDto $dto
      *
-     * @return string
+     * @return CreatedMessageDto
      */
-    public function execute(CreateMessageDto $dto): string
+    public function execute(CreateMessageDto $dto): CreatedMessageDto
     {
         $violations = $this->validator->validate($dto);
         if ($violations->count()) {
@@ -99,11 +101,14 @@ class CreateMessageUseCase
             }
 
             $this->transactionManager->commit();
-            return $hash;
+            return new CreatedMessageDto(
+                $hash,
+                $message->validUntil,
+            );
         } catch (ValidationException|ErrorException $e) {
             $this->transactionManager->rollback();
             throw $e;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->transactionManager->rollback();
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             throw ErrorException::new('Не удалось создать сообщение');

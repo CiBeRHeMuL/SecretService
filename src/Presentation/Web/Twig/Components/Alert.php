@@ -12,7 +12,7 @@ class Alert
     public string $icon {
         get => match ($this->type) {
             'success' => 'bi:check-circle',
-            'danger' => 'bi:exclamation-circle',
+            default => 'bi:exclamation-circle',
         };
     }
 }

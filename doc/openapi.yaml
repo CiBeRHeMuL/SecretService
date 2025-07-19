@@ -128,8 +128,11 @@ components:
     CreatedMessage:
       required:
         - url
+        - valid_until
       properties:
         url:
+          type: string
+        valid_until:
           type: string
       type: object
     ValidationResponse:

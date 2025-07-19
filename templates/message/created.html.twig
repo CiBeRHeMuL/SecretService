@@ -22,15 +22,20 @@
         });
     </script>
     <div class="row gy-2">
+        <twig:DecreasingTimerAlert
+            interval="{{ messageLifetime }}"
+            whileMessage="{{ 'message_lifetime_while_without_interval'|trans }}"
+            expiredMessage="{{ 'message_lifetime_expired'|trans }}"
+            whileType="warning"
+            expiredType="danger"
+        />
         <div
             type="button"
             class="btn btn-lg btn-primary col-12"
             id="copy-link-button"
             data-url="{{ url('get_message', {'hash': hash}) }}"
         >
-            <div class="d-flex align-items-center justify-content-center w-100">
-                <span id="copy-link-button-text">{{ 'copy_new_message'|trans }}</span>
-            </div>
+            <span id="copy-link-button-text">{{ 'copy_new_message'|trans }}</span>
         </div>
         <a href="{{ url('create_message') }}" class="btn btn-outline-success col-12">
             {{ 'create_new_message'|trans }}

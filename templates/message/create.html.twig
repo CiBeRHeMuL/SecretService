@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form(form) }}
+    <div class="row gy-2">
+        <div class="col-12">
+            <twig:Alert type="warning" message="{{ 'message_lifetime'|trans({interval: messageLifetime}) }}" class="w-100" />
+        </div>
+        {{ form(form) }}
+    </div>
 {% endblock %}

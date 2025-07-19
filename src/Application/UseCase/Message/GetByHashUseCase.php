@@ -34,12 +34,15 @@ class GetByHashUseCase
                 return null;
             }
 
+            $filesDownloadHash = $this->generateDownloadFilesHash($message);
+
             $result = new GetMessageDto(
                 $this->messageTextEncryptor->decrypt($message->textHash),
-                $this->generateDownloadFilesHash($message),
+                $filesDownloadHash,
+                $filesDownloadHash ? $message->validUntil : null,
             );
 
-            $this->messageService->delete($message);
+//            $this->messageService->delete($message);
 
             return $result;
         } catch (Throwable $e) {
