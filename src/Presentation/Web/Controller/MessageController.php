@@ -10,7 +10,6 @@ use App\Domain\Exception\ValidationException;
 use App\Domain\Helper\HDate;
 use App\Presentation\Web\Form\CreateMessageForm;
 use DateTimeImmutable;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormError;
@@ -36,9 +35,7 @@ class MessageController extends AbstractController
         TranslatorInterface $translator,
         #[Autowire('%env(MESSAGE_LIFETIME)%')]
         string|int|float $messageLifetime,
-        LoggerInterface $logger,
     ): Response {
-        $logger->error($request->attributes->get('_locale'));
         $messageLifetime = HDate::formatInterval(HDate::calculateInterval($messageLifetime), true, true);
         $form = $this->createForm(CreateMessageForm::class);
         $form->handleRequest($request);
