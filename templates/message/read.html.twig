@@ -5,14 +5,15 @@
         document.addEventListener('DOMContentLoaded', function () {
             const toastTrigger = document.getElementById('text-block')
             const toastLiveExample = document.getElementById('text-block-copied')
+            const textBlock = document.getElementById('text-block');
 
             if (toastTrigger) {
                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-                toastTrigger.addEventListener('click', (evt) => {
+                toastTrigger.addEventListener('click', () => {
                     navigator.clipboard
-                        .writeText(evt.currentTarget.dataset.url)
+                        .writeText(textBlock.textContent.trim())
                         .then(function () {
-                            let button = document.querySelector('#text-block');
+                            let button = document.getElementById('text-block');
                             button.classList.remove('border-primary');
                             button.classList.add('border-success', 'disabled');
                             toastBootstrap.show();
@@ -21,6 +22,22 @@
                                 button.classList.remove('border-success', 'disabled');
                                 button.classList.add('border-primary');
                                 toastBootstrap.hide();
+                            }, 2000);
+                        });
+                });
+                document.querySelector('#copy-text-button').addEventListener('click', function (evt) {
+                    navigator.clipboard
+                        .writeText(textBlock.textContent.trim())
+                        .then(function () {
+                            let button = document.querySelector('#copy-text-button');
+                            button.classList.remove('btn-primary');
+                            button.classList.add('btn-success', 'disabled');
+                            button.querySelector('#copy-text-button-text').textContent = "{{ 'message_copied'|trans }}";
+
+                            setTimeout(function () {
+                                button.classList.remove('btn-success', 'disabled');
+                                button.classList.add('btn-primary');
+                                button.querySelector('#copy-text-button-text').textContent = "{{ 'message_copy_text'|trans }}";
                             }, 2000);
                         });
                 });
@@ -45,6 +62,13 @@
                 id="text-block"
             >
                 {{ message.text }}
+            </div>
+            <div
+                type="button"
+                class="btn btn-lg btn-primary col-12"
+                id="copy-text-button"
+            >
+                <span id="copy-text-button-text">{{ 'message_copy_text'|trans }}</span>
             </div>
         {% endif %}
         {% if message.filesDownloadHash %}
