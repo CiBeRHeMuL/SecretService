@@ -4,6 +4,7 @@ namespace App\Presentation\Web\Controller;
 
 use App\Application\Dto\Message\CreateMessageDto;
 use App\Application\Dto\Message\CreateMessageFileDto;
+use App\Application\UseCase\Message\CheckByHashUseCase;
 use App\Application\UseCase\Message\CreateMessageUseCase;
 use App\Application\UseCase\Message\GetByHashUseCase;
 use App\Domain\Exception\ValidationException;
@@ -109,7 +110,7 @@ class MessageController extends AbstractController
         return $this->render('message/created.html.twig', compact('hash', 'messageLifetime'));
     }
 
-    #[Route('/message/{hash}', name: 'get_message', requirements: ['hash' => '.*'], methods: ['GET'])]
+    #[Route('/message/read/{hash}', name: 'read_message', requirements: ['hash' => '.*'], methods: ['GET'])]
     public function read(
         string $hash,
         GetByHashUseCase $useCase,
@@ -119,5 +120,17 @@ class MessageController extends AbstractController
             return $this->render('message/error/not_found.html.twig');
         }
         return $this->render('message/read.html.twig', compact('message'));
+    }
+
+    #[Route('/message/{hash}', name: 'preview_message', requirements: ['hash' => '.*'], methods: ['GET'])]
+    public function preview(
+        string $hash,
+        CheckByHashUseCase $useCase,
+    ): Response {
+        $exists = $useCase->execute($hash);
+        if (!$exists) {
+            return $this->render('message/error/not_found.html.twig');
+        }
+        return $this->render('message/preview.html.twig', compact('hash'));
     }
 }

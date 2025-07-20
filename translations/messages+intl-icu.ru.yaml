@@ -23,3 +23,4 @@ message_lifetime_while_without_interval: 'Сообщение будет дейс
 message_lifetime_expired: 'Сообщение больше не действительно'
 files_lifetime_while_without_interval: 'Скачивание файлов будет доступно еще'
 files_lifetime_expired: 'Скачать файлы больше нельзя'
+read_message: 'Открыть сообщение'

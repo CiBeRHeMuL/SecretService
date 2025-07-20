@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Presentation\Api\Controller;
+namespace App\Presentation\Web\Controller;
 
 use App\Application\UseCase\File\DownloadFilesUseCase;
-use App\Presentation\Api\Response\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Presentation\Api\OpenApi\Attribute as LOA;
 
-class FilesController extends AbstractController
+class
+FilesController extends AbstractController
 {
     #[Route('/files/{hash}', 'download_files', requirements: ['hash' => '.*'], methods: ['GET'])]
-    #[LOA\FileResponse(['zip'])]
-    #[LOA\ErrorResponse(404)]
     public function download(
         string $hash,
         DownloadFilesUseCase $useCase,
-    ): StreamedResponse|JsonResponse {
+    ): Response
+    {
         $file = $useCase->execute($hash);
         if ($file === null) {
-            return Response::notFound();
+            return $this->render('message/error/not_found.html.twig');
         }
         $stat = fstat($file->getTempResource());
         return new StreamedResponse(

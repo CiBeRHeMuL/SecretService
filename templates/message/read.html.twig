@@ -49,7 +49,7 @@
         {% endif %}
         {% if message.filesDownloadHash %}
             <a
-                href="{{ path('api_download_files', {hash: message.filesDownloadHash}) }}"
+                href="{{ path('download_files', {hash: message.filesDownloadHash}) }}"
                 download
                 class="btn btn-outline-primary col-12"
                 onclick="this.remove(); document.querySelector('#download-files-timer').remove();"

@@ -45,23 +45,6 @@ services:
       - {name: monolog.processor, channel: 'app'}
   # --- end monolog/monolog
 
-  # --- start listeners
-  listeners.api.error:
-    class: App\Presentation\Api\Listener\ErrorResponseListener
-    arguments:
-      $debug: '%kernel.debug%'
-      $logger: '@logger'
-      $pathPattern: '^/api([\/\?].*)?$'
-    tags:
-      - {name: kernel.event_listener, event: kernel.exception, priority: 10}
-  listeners.api.validation:
-    class: App\Presentation\Api\Listener\ValidationResponseListener
-    arguments:
-      $pathPattern: '^/api([\/\?].*)?$'
-    tags:
-      - {name: kernel.event_listener, event: kernel.exception, priority: 100}
-  # --- end listeners
-
   # --- start encryptors
   App\Domain\Service\Security\EncryptorInterface $messageTextEncryptor:
     class: App\Infrastructure\Service\Security\OpenSSLEncryptor

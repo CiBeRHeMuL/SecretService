@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row gy-2">
+        <a
+            class="btn btn-lg btn-primary col-12"
+            href="{{ url('read_message', {'hash': hash}) }}"
+        >
+            <span>{{ 'read_message'|trans }}</span>
+        </a>
+        <a href="{{ url('create_message') }}" class="btn btn-outline-success col-12">
+            {{ 'create_new_message'|trans }}
+        </a>
+    </div>
+{% endblock %}

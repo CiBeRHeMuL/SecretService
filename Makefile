@@ -67,9 +67,4 @@ help:
     "migrate                  Применение миграций\n" \
     "docker-migrate           Применение миграций внутри docker контейнера\n" \
     "migration                Создание новой миграции\n" \
-    "help                     Помощь\n" \
-	"openapi                  Генерация документации Swagger для API\n"
-
-# Документация
-openapi:
-	touch ./doc/openapi.yaml && $(CONSOLE) nelmio:apidoc:dump --format=yaml > ./doc/openapi.yaml
+    "help                     Помощь\n"

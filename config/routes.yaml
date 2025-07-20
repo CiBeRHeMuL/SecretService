@@ -7,14 +7,3 @@ web:
     _locale: 'ru'
   requirements:
     _locale: 'ru'
-
-
-api:
-  resource:
-    path: ../src/Presentation/Api/Controller/
-    namespace: App\Presentation\Api\Controller
-  prefix: '/api'
-  name_prefix: 'api_'
-  type: attribute
-  defaults:
-    _locale: 'ru'
