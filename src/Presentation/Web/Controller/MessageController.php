@@ -7,6 +7,7 @@ use App\Application\Dto\Message\CreateMessageFileDto;
 use App\Application\UseCase\Message\CheckByHashUseCase;
 use App\Application\UseCase\Message\CreateMessageUseCase;
 use App\Application\UseCase\Message\GetByHashUseCase;
+use App\Application\UseCase\Message\GetExpirationByHashUseCase;
 use App\Domain\Exception\ValidationException;
 use App\Domain\Helper\HDate;
 use App\Presentation\Web\Form\CreateMessageForm;
@@ -16,7 +17,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -68,10 +68,7 @@ class MessageController extends AbstractController
                     );
                     return $this->redirectToRoute(
                         'get_created_message',
-                        [
-                            'hash' => $createdMessage->hash,
-                            'vu' => $createdMessage->validUntil->format(DATE_RFC3339),
-                        ],
+                        ['hash' => $createdMessage->hash],
                     );
                 } catch (ValidationException $e) {
                     foreach ($e->getErrors() as $error) {
@@ -98,12 +95,10 @@ class MessageController extends AbstractController
     #[Route('/message/created/{hash}', name: 'get_created_message', requirements: ['hash' => '.*'], methods: ['GET'])]
     public function created(
         string $hash,
-        #[MapQueryParameter('vu')]
-        string $validUntil,
+        GetExpirationByHashUseCase $useCase,
     ): Response {
-        $validUntil = DateTimeImmutable::createFromFormat(DATE_RFC3339, $validUntil);
-        $validUntil ??= new DateTimeImmutable();
-        if ($validUntil <= new DateTimeImmutable()) {
+        $validUntil = $useCase->execute($hash);
+        if ($validUntil === null || $validUntil <= new DateTimeImmutable()) {
             return $this->render('message/error/not_found.html.twig');
         }
         $messageLifetime = new DateTimeImmutable()->diff($validUntil);
