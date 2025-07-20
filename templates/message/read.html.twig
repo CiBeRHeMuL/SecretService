@@ -61,19 +61,19 @@
             {{ 'create_new_message'|trans }}
         </a>
     </div>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast-container position-fixed bottom-0 w-100 p-3">
         <div
             id="text-block-copied"
-            class="toast border-0"
+            class="toast border-0 shadow-none justify-content-center justify-content-md-end d-flex w-100"
             role="alert"
             aria-live="assertive"
             aria-atomic="true"
+            data-bs-autohide="false"
         >
             <twig:Alert
                 type="success"
                 message="{{ 'message_copied'|trans }}"
                 style="margin: 0;"
-                class="w-100"
             />
         </div>
     </div>
