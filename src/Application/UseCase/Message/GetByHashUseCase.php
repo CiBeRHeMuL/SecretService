@@ -10,6 +10,7 @@ use App\Domain\Service\Jwt\JwtServiceInterface;
 use App\Domain\Service\Message\MessageService;
 use App\Domain\Service\Security\EncryptorInterface;
 use DateTimeImmutable;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
@@ -21,6 +22,7 @@ class GetByHashUseCase
         private EncryptorInterface $messageTextEncryptor,
         private JwtServiceInterface $jwtService,
         private FilesService $fileService,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -42,10 +44,11 @@ class GetByHashUseCase
                 $filesDownloadHash ? $message->validUntil : null,
             );
 
-//            $this->messageService->delete($message);
+            $this->messageService->delete($message);
 
             return $result;
         } catch (Throwable $e) {
+            $this->logger->error($e);
             return null;
         }
     }
