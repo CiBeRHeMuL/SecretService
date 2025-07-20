@@ -3,6 +3,11 @@ web:
     path: ../src/Presentation/Web/Controller/
     namespace: App\Presentation\Web\Controller
   type: attribute
+  defaults:
+    _locale: 'ru'
+  requirements:
+    _locale: 'ru'
+
 
 api:
   resource:
@@ -11,3 +16,5 @@ api:
   prefix: '/api'
   name_prefix: 'api_'
   type: attribute
+  defaults:
+    _locale: 'ru'

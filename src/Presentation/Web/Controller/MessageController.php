@@ -22,7 +22,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MessageController extends AbstractController
 {
-    #[Route(['/message', '/'], 'create_message')]
+    #[Route('/', 'index')]
+    public function index(): Response
+    {
+        return $this->redirectToRoute('create_message');
+    }
+
+    #[Route('/message', 'create_message')]
     public function create(
         Request $request,
         CreateMessageUseCase $useCase,
