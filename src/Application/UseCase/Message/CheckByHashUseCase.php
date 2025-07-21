@@ -22,7 +22,16 @@ class CheckByHashUseCase
     {
         try {
             $id = $this->messageIdEncryptor->decrypt($hash);
+        } catch (Throwable $e) {
+            return false;
+        }
+        try {
             $message = $this->messageService->getById(new Uuid($id));
+        } catch (Throwable $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+        try {
             return $message !== null && $message->validUntil > new DateTimeImmutable();
         } catch (Throwable $e) {
             $this->logger->error($e);

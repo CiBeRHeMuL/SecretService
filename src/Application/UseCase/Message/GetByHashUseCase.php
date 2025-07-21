@@ -30,8 +30,16 @@ class GetByHashUseCase
     {
         try {
             $id = $this->messageIdEncryptor->decrypt($hash);
-
+        } catch (Throwable $e) {
+            return null;
+        }
+        try {
             $message = $this->messageService->getById(new Uuid($id));
+        } catch (Throwable $e) {
+            $this->logger->error($e->getMessage());
+            return null;
+        }
+        try {
             if (!$message || $message->validUntil < new DateTimeImmutable()) {
                 return null;
             }
