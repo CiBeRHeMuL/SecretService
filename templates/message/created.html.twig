@@ -37,6 +37,12 @@
         >
             <span id="copy-link-button-text">{{ 'copy_new_message'|trans }}</span>
         </div>
+        <div class="col-12 d-flex justify-content-center flex-wrap">
+            <span class="w-100 text-center">{{ 'or_scan_qrcode'|trans }}</span>
+            <a href="{{ url('preview_message', {'hash': hash}) }}" target="_blank">
+                {{ svg_qrcode(url('preview_message', {'hash': hash}), ...{size: 200}) | raw }}
+            </a>
+        </div>
         <a href="{{ url('create_message') }}" class="btn btn-outline-success col-12">
             {{ 'create_new_message'|trans }}
         </a>

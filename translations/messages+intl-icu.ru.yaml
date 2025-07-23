@@ -11,7 +11,7 @@ Text: 'Текст сообщения'
 Files: 'Файлы'
 Submit: 'Отправить'
 'Drag and drop or browse': Выберите файлы
-copy_new_message: 'Скопировать ссылку на сообщение'
+copy_new_message: 'Скопируй ссылку на сообщение'
 copied_new_message: 'Ссылка скопирована'
 files:
   not_found: 'Файлы не найдены'
@@ -25,3 +25,4 @@ files_lifetime_while_without_interval: 'Скачивание файлов буд
 files_lifetime_expired: 'Скачать файлы больше нельзя'
 read_message: 'Открыть сообщение'
 message_copy_text: 'Скопировать текст'
+or_scan_qrcode: '...или отсканируй QR код'
