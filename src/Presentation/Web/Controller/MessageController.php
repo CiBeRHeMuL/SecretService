@@ -98,7 +98,7 @@ class MessageController extends AbstractController
         GetExpirationByHashUseCase $useCase,
     ): Response {
         $validUntil = $useCase->execute($hash);
-        if ($validUntil === null || $validUntil <= new DateTimeImmutable()) {
+        if ($validUntil === null) {
             return $this->render('message/error/not_found.html.twig');
         }
         $messageLifetime = new DateTimeImmutable()->diff($validUntil);

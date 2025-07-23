@@ -4,7 +4,6 @@ namespace App\Application\UseCase\Message;
 
 use App\Domain\Service\Message\MessageService;
 use App\Domain\Service\Security\EncryptorInterface;
-use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
@@ -22,19 +21,15 @@ class CheckByHashUseCase
     {
         try {
             $id = $this->messageIdEncryptor->decrypt($hash);
+            $id = new Uuid($id);
         } catch (Throwable $e) {
             return false;
         }
         try {
-            $message = $this->messageService->getById(new Uuid($id));
+            $message = $this->messageService->getById($id);
+            return $message !== null && $message->isValid;
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
-            return false;
-        }
-        try {
-            return $message !== null && $message->validUntil > new DateTimeImmutable();
-        } catch (Throwable $e) {
-            $this->logger->error($e);
             return false;
         }
     }

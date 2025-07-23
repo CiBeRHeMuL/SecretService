@@ -22,17 +22,18 @@ class GetExpirationByHashUseCase
     {
         try {
             $id = $this->messageIdEncryptor->decrypt($hash);
+            $id = new Uuid($id);
         } catch (Throwable $e) {
             return null;
         }
         try {
-            $message = $this->messageService->getById(new Uuid($id));
+            $message = $this->messageService->getById($id);
+            return $message !== null && $message->isValid
+                ? $message->validUntil
+                : null;
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
             return null;
         }
-        return $message !== null && $message->validUntil > new DateTimeImmutable()
-            ? $message->validUntil
-            : null;
     }
 }

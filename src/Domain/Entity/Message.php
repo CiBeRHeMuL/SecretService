@@ -35,4 +35,8 @@ class Message
         get => $this->validUntil;
         set => $this->validUntil = $value;
     }
+
+    public bool $isValid {
+        get => $this->validUntil >= new DateTimeImmutable();
+    }
 }
