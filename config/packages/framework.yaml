@@ -12,6 +12,8 @@ framework:
   trusted_headers: '%env(TRUSTED_HEADERS)%'
   csrf_protection: ~
 
+  enabled_locales: ['en', 'ru']
+
 when@test:
   framework:
     test: true
